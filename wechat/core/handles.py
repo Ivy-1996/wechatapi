@@ -1,5 +1,3 @@
-from django.utils.functional import cached_property
-
 from wechat.serializers import MessageReadModelSerializer
 from wechat.models import ForwardMessageConfModel, ForwardMessageLog
 

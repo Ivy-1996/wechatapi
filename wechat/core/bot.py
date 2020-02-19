@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.cache import cache
 
 from rest_framework.request import Request
 
@@ -9,7 +8,6 @@ from wxpy import Bot
 from wxpy.api.messages import Messages, MessageConfig
 
 from wechat.core.handles import SaveMessageHandle, ForwardMessageHandle
-from wechat.core import pkl_path
 
 from . import message
 from .. import models
@@ -21,7 +19,6 @@ import os
 import time
 import requests
 import re
-import pysnooper
 
 
 class BaseMessageBot(Bot):
@@ -177,9 +174,7 @@ class DefaultBot(BaseMessageBot):
         message_conf = self.kwrags.get('message_conf', self.default_message_conf)
         self.registered.append(MessageConfig(bot=self, func=self.listen, **message_conf))
 
-    @pysnooper.snoop()
     def listen(self, msg):
-        print(msg)
         context = self.get_context()
         for handle_class in self.handler_classes:
             handle = handle_class(msg, context)

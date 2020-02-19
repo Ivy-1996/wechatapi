@@ -29,7 +29,7 @@ class AppModel(models.Model):
 
     @classmethod
     def create_app(cls):
-        app_id, app_secret = uuid.uuid4().hex, uuid.uuid1().hex
+        app_id, app_secret = uuid.uuid4().__str__(), uuid.uuid1().hex
         try:
             cls.objects.get(app_id=app_id)
         except cls.DoesNotExist:
