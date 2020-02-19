@@ -30,7 +30,9 @@ class AccessToken:
 
         # 把原来的旧的删掉,减少内存的占用
         raw_token = coon.get(key)
-        coon.delete(raw_token)
+
+        if raw_token:
+            coon.delete(raw_token)
 
         # 创建反向的查询,即使生成了多个token也只会有唯一一个生效
         coon.set(key, token)
