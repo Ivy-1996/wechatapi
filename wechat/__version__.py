@@ -1,0 +1,9 @@
+__title__ = 'djangowechatapi'
+__description__ = '基于wxpy的web服务'
+__url__ = 'https://github.com/Ivy-1996/wechatapi.git'
+__version__ = '0.4'
+__build__ = 0x022200
+__author__ = 'ivy-1996'
+__author_email__ = '919624032@qq.com'
+__license__ = 'Apache 2.0'
+__copyright__ = 'Copyright 2020 ivy'
