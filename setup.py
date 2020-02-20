@@ -14,7 +14,7 @@ setup(name='djangowechatapi',
           'django_redis',
           'requests',
           'django_filter',
-          'django=2.2.10',
-          'pillow'
+          'django=2.2.0',
+          'pillow',
       ]
       )
