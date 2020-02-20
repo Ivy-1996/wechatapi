@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='djangowechatapi',
-      version='0.5',
+      version='0.51',
       description='wechat api for web',
       author='ivy',
       author_email='919624032@qq.com',
@@ -15,7 +15,6 @@ setup(name='djangowechatapi',
           'django_redis',
           'requests',
           'django_filter',
-          'django=2.1.5',
           'pillow',
       ]
       )
