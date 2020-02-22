@@ -176,7 +176,8 @@ class DefaultBot(BaseMessageBot):
 
     def listen(self, msg):
         context = self.get_context()
-        for handle_class in self.handler_classes:
+        handler_classes = self.get_handler_classes()
+        for handle_class in handler_classes:
             handle = handle_class(msg, context)
             handle.dispatch()
 
@@ -185,6 +186,9 @@ class DefaultBot(BaseMessageBot):
             'kwargs': self.kwrags,
             'request': self.request
         }
+
+    def get_handler_classes(self):
+        return self.handler_classes
 
 
 class ModelMessageBot(DefaultBot):

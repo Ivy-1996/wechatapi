@@ -5,7 +5,7 @@ from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin
 
 from django_redis import get_redis_connection
 
-from wechat.core.bot import ForwardMessageBot
+from wechat.core.bot import SaveModelMessageBot
 from wechat.core.authentication import AccessTokenAuthentication
 from wechat.core import pkl_path
 
@@ -18,7 +18,7 @@ import os
 
 
 class LoginView(APIView):
-    bot_class = ForwardMessageBot
+    bot_class = SaveModelMessageBot
 
     authentication_classes = [AccessTokenAuthentication]
 
@@ -68,6 +68,7 @@ class FriendsReadOnlyModelViewSet(ReadOnlyModelViewSet):
     """好友列表查询接口"""
     serializer_class = serializers.WxUserModelModelSerializer
     authentication_classes = [AccessTokenAuthentication]
+    filterset_fields = ['puid', 'name', 'nick_name', 'user_name', 'remark_name', 'signature', 'sex', 'province', 'city']
 
     def get_queryset(self):
         return self.request.user.friends.all()
@@ -77,6 +78,7 @@ class GroupsReadOnlyModelViewSet(ReadOnlyModelViewSet):
     """群查询接口"""
     authentication_classes = [AccessTokenAuthentication]
     serializer_class = serializers.WxGroupModelModelSerializer
+    filterset_fields = ['puid', 'name', 'nick_name', 'user_name', ]
 
     def get_queryset(self):
         return self.request.user.wxgroupmodel_set.all()
@@ -112,6 +114,8 @@ class MpReadOnlyModelViewSet(ReadOnlyModelViewSet):
     """微信公众号查询接口"""
     serializer_class = serializers.WxMpsModelModelSerializer
     authentication_classes = [AccessTokenAuthentication]
+
+    filterset_fields = ['puid', 'name', 'nick_name', 'province', 'city', 'signature']
 
     def get_queryset(self):
         return self.request.user.wxmpsmodel_set.all()
@@ -153,4 +157,4 @@ class UpdateUserInfoView(APIView):
             utils.update_app_info_by_view(request)
         except AssertionError as e:
             return Response({'errmsg': e.__str__()})
-        return Response({'msg': '更新成功!'})
+        return Response({'msg': '更新成功!'}, status=201)

@@ -142,7 +142,7 @@ class WxMpsModel(models.Model):
     province = models.CharField(max_length=15, verbose_name="省", null=True)
     city = models.CharField(max_length=15, verbose_name="市", null=True)
     signature = models.CharField(max_length=255, verbose_name="签名", null=True)
-    owner = models.ForeignKey(WxUserModel, on_delete=models.SET_NULL, null=True, verbose_name='群归属')
+    owner = models.ForeignKey(WxUserModel, on_delete=models.SET_NULL, null=True, verbose_name='公众号归属')
 
     class Meta:
         verbose_name_plural = verbose_name = '微信公众号'

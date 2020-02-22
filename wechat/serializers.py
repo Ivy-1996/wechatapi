@@ -88,6 +88,15 @@ class WxUserModelModelSerializer(serializers.ModelSerializer):
         exclude = ['friends']
 
 
+# class WxFriendsModelSerializer(serializers.ModelSerializer):
+#     friends = serializers.ManyRelatedField(child_relation=WxUserModelModelSerializer())
+#
+#     class Meta:
+#         model = models.WxUserModel
+#         # exclude = ['friends']
+#         fields = '__all__'
+
+
 class WxGroupModelModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.WxGroupModel
