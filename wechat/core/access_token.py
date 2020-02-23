@@ -36,6 +36,7 @@ class AccessToken:
 
         # 创建反向的查询,即使生成了多个token也只会有唯一一个生效
         coon.set(key, token)
+        coon.expire(key, cls.expire_in)
         return token
 
     @classmethod

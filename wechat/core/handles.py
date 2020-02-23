@@ -10,7 +10,7 @@ import requests
 
 class BaseHandle:
     def __init__(self, message, context: dict):
-        self.message = message
+        self.message = message  # message对象对wxpy提供的原始的message对象,详情请参考wxpy
         self.kwargs = context.pop('kwargs')
         self.request = context.pop('request')
 
@@ -39,12 +39,12 @@ class SaveMessageHandle(BaseHandle):
     def default_handle(self, **kwargs):
         serializer = self.message.get_serializer()
         data = serializer.data
-        print(data)
         # 默认是执行`message`对象的`serializer`对象的保存消息方法
         return serializer.message_create(data)
 
 
 class ForwardMessageHandle(SaveMessageHandle):
+    """实现简单的消息转发"""
 
     def default_handle(self, **kwargs):
         """重写父类的默认分发消息的方法"""
