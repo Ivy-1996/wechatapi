@@ -4,10 +4,10 @@
 
 #### 安装
 
-```shell
-pip install djangowechatapi
-python manager.py migrate
-```
+*	使用`pip`
+    ```shell
+    pip install djangowechatapi
+    ```
 
 
 
@@ -59,6 +59,11 @@ python manager.py migrate
 
 * 如果使用的是`mysql`数据库存储,则需要制定数据库和表的编码为`utf8mb4`
 
+* 执行迁移脚本
+   ```shell  
+   python manager.py migrate
+   ```
+
 
 ### 应用接口详情
 *	由于网页版微信的保密机制,无法捕捉到用户的唯一id，这里采用的是wxpy提供的puid作为用户的唯一身份标识。
@@ -78,7 +83,7 @@ python manager.py migrate
 
 *	获取`access_token`
 	*	所有api的默认的认证方式都是通过`access_token`来实现的，`access_token`的有效期为2个小时(可以在settings.py里面设置`ACCESS_TOKEN_EXPIRE_IN`来修改默认的2个小时)
-	*	如果你觉得`access_token`不够安全,你也可以使用模块提供的`SignatureAuthentication`来实现实时用户认证。
+	*	如果你觉得`access_token`不够安全,你也可以使用模块提供的`SignatureAuthentication`来实现实时用户认证。具体使用请参考源码。
 	* 获取`access_token`(`access_token`依赖redis缓存,请确保上述配置均已配置完成)
 	
 		`method`：`GET`
@@ -120,29 +125,30 @@ python manager.py migrate
 *	登陆验证
 	`method`: `GET`
 	`url`：`/check-login?access_token=<access_token>&uuid=<uuid>`
-	正常返回
-    ```python
+	`return`:
+   
+    ```json
     {
         "status": "408",
         "alive": null,
         "avatar": null
     }
-    ```
+	 ```
 	
 	`status`: 
 		*	408:等待扫描登录
 		*	201：已扫描，但为点击确认登录(此时可以获取到用户的头像)
 		*	200：已扫描登录成功。
 	`avatar`: 扫描用户的头像
-	`alive`: 登录后为True,退出登录后为False,未登录为null
-
+`alive`: 登录后为True,退出登录后为False,未登录为null
+	
 	如果是做成网页版登录,前端在拿到登录二维码之后可以轮询这个接口来判断用户的登录状况
 	
 *	获取好友列表
 	`method`: `GET`
 	`url`: `/friends?access_token=<access_token>`
 	`return`:
-    ```python
+    ```json
     {
         "count": 140,
         "next": "http://127.0.0.1:8000/friends?access_token=fc99fe6e-7771-4e22-b89d-e9827463bf65&page=4",
@@ -170,7 +176,8 @@ python manager.py migrate
 	`method`: `GET`
 	`url`: `groups?access_token=<access_token>`
 	`return`: 
-    ```python
+   
+    ```json
     {
         "count": 15,
         "next": "http://127.0.0.1:8000/groups?access_token=fc99fe6e-7771-4e22-b89d-e9827463bf65&page=2",
@@ -187,14 +194,14 @@ python manager.py migrate
     ......
     ]
     }
-    ```
-	`query_params`: `['puid', 'name', 'nick_name', 'user_name', ]`
-
+	 ```
+`query_params`: `['puid', 'name', 'nick_name', 'user_name', ]`
+	
 *	查看群成员列表
 	`method`: `GET`
 	`URL`: `/members/<group_puid>?access_token=<access_token>`
 	`return`:
-    ```python
+    ```json
         {
             "count": 4,
             "next": null,
@@ -221,7 +228,7 @@ python manager.py migrate
 	`method`: 'GET',
 	`url`: '/mps?access_token=<access_token>'
 	`return`: 
-    ```python
+    ```json
     {
         "count": 126,
         "next": "http://127.0.0.1:8000/mps?access_token=fc99fe6e-7771-4e22-b89d-e9827463bf65&page=2",
@@ -245,7 +252,7 @@ python manager.py migrate
 	`method`: `GET`
 	`URL`: `/messages?access_token=<access_token>`
 	`return`: 
-    ```python
+    ```json
     {
         "count": 205,
         "next": "http://127.0.0.1:8000/messages?access_token=fc99fe6e-7771-4e22-b89d-e9827463bf65&page=2&puid=",
@@ -273,11 +280,14 @@ python manager.py migrate
     }
     ```
 	`query_params`: `['type', 'create_time', 'receive_time', 'is_at', 'sender_puid', 'receiver_puid']`
-	`参数说明`：
-		*	content：具体的聊天记录
-		*	type：发送者和接受者的类型编码 {`wxusermodel`: `对象为好友`，`wxgroupmodel`: `对象为群`， `wxmpsmodel`: `对象为公众号`}
-		*	sender_puid&receiver_puid：发送者和接受者的唯一身份标识，具体请参考`type`字段
-		*	member：群成员,当该条消息来自群的时候,这个字段才会有值，参考该条信息，该member对象为sender发送者
+	`参数说明`:
+	 	`content`: 具体的聊天记录 
+	 	`type`:  发送者和接受者的类型编码 {`wxusermodel`: `对象为好友`，`wxgroupmodel`: `对象为群`， `wxmpsmodel`: `对象为公众号`}
+	 	`sender_puid&receiver_puid`: 发送者和接受者的唯一身份标识，具体请参考`type`字段
+	 	`member`: 群成员.当该条消息来自群的时候,这个字段才会有值，参考该条信息，该member对象为sender发送者
+   	 
+  
+	​	
 
 
 *	主动发送消息
@@ -293,7 +303,7 @@ python manager.py migrate
    	 | file       |    否    |  File    |文件对象。当type为'image', 'video', 'file'中的一种时,file为必填参数 |
 	
 	`return`:
-    ```python
+    ```json
     {
         "id": 6920281997121075000,
         "content": {
@@ -364,7 +374,7 @@ urlpatterns = [
 
 *	自定义的登录视图需要继承`wechat.LoginView`,并且需要制定`bot_class`
 *	自定义的`bot_class`需要继承默认的`DefaultBot`,并且需要制定定义消息处理的handle类列表`handler_classes`, 或者你可以重写`get_handler_classes`类方法。handler_classes里的每个handle类都会接收到消息。
-*	自定义的handle_class需要继承`BaseHandle`，想要处理不同的消息类型，只要在Handle_class里写上消息类型的小写的方法即可,如，想在一个Handle_class里面处理消息类型为`Text`的请求，如上`FirstHandle`即可。如果没有定义消息类型的方法，那么默认该条消息不会被处理,你也可以如上`SecondHandle`来修改默认行为。
+*	自定义的handle_class需要继承`BaseHandle`，想要处理不同的消息类型，只要在Handle_class里写上消息类型的小写的方法即可,如，想在一个Handle_class里面处理消息类型为`Text`的请求，如上`FirstHandle`即可。如果没有定义消息类型的方法，那么默认该条消息不会被处理,你也可以如上`SecondHandle`来修改默认行为。一个handle可以响应多种消息类型。
 
 #### 常见的http状态码
 	200：访问成功
@@ -374,10 +384,18 @@ urlpatterns = [
 	403：禁止
 	404：资源不存在
 
-#### 命令行模式：
-	常见wechat应用：
-	    `python manager.py createwechatapp`
-	更新app的信息列表,如上`update`接口
-		`python manager.py update_bot  <app_name>`
-		如果没有app_name参数,为更新所有的app
+#### 命令行模式
 
+* 创建wechat应用
+
+  ```shell
+  python manager.py createwechatapp
+  ```
+
+* 更新app绑定用户的列表详情(如上述`update`接口)
+
+  ```shell
+  python manager.py update_bot  <app_name>
+  ```
+
+  
