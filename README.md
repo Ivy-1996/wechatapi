@@ -9,6 +9,14 @@
     pip install djangowechatapi
     ```
 
+*   源码安装
+    ```shell
+    git clone https://github.com/Ivy-1996/wechatapi.git
+    
+    cd wechatapi
+    
+    python setup.py install
+    ```
 
 
 #### 配置
