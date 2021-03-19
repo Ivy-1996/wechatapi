@@ -10,7 +10,7 @@ setup(name='djangowechatapi',
       python_requires='>=3.6',
       license='Apache License',
       install_requires=[
-          'djangorestframework==3.11.0',
+          'djangorestframework==3.11.2',
           'wxpy',
           'django_redis',
           'requests',
